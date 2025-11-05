@@ -33,7 +33,7 @@ export const createSubmission = async (req, res, next) => {
         <p>Submitted by: <b>${users.name} (${users.email})</b></p>
         <p>You can review it on the admin dashboard.</p>
       `;
-      await sendEmail(admin.email, `New Submission: ${task.title}`, html);
+      sendEmail(admin.email, `New Submission: ${task.title}`, html);
     }
     //
 
@@ -49,27 +49,30 @@ export const updateSubmissionStatus = async (req, res, next) => {
     const { id } = req.params; // submission id
     const { status, feedback } = req.body;
 
-    const oldSubmission = await submissionModel.findByIdAndUpdate(id, {
-      status,
-      feedback,
-    });
-
-    //If submission not found
-    if (!oldSubmission) {
+    const submission = await submissionModel.findById(id);
+    if (!submission) {
       return res.status(404).json({ message: "Submission not found" });
     }
 
-    //Submission found
-    if (status === "Approved" && oldSubmission.status !== "Approved") {
-      const task = await taskModel.findById(oldSubmission.taskId);
+    const wasAlreadyApproved = submission.status === "Approved";
+    const isNowApproved = status === "Approved";
+
+    submission.status = status;
+    submission.feedback = feedback;
+
+    await submission.save();
+
+    if (isNowApproved && !wasAlreadyApproved) {
+      const task = await taskModel.findById(submission.taskId);
       if (task && task.points > 0) {
-        await userModel.findByIdAndUpdate(oldSubmission.userId, {
+        await userModel.findByIdAndUpdate(submission.userId, {
           $inc: { points: task.points },
         });
       }
     }
+
     const updatedSubmission = await submissionModel
-      .findByIdAndUpdate(id, { status, feedback }, { new: true })
+      .findById(id)
       .populate("userId", "name email")
       .populate("taskId", "title");
 
@@ -78,7 +81,7 @@ export const updateSubmissionStatus = async (req, res, next) => {
       const task = updatedSubmission.taskId;
       const html = taskAssignedTemplate(user, task, status, feedback);
 
-      await sendEmail(user.email, `Submission Update: ${task.title}`, html);
+      sendEmail(user.email, `Submission Update: ${task.title}`, html);
     }
 
     res
@@ -95,7 +98,7 @@ export const getSubmissionsByTask = async (req, res, next) => {
     const { taskId } = req.params;
     const submissions = await submissionModel
       .find({ taskId })
-      .populate("userID", "name email");
+      .populate("userId", "name email");
     res.status(200).json(submissions);
   } catch (error) {
     next(error);
@@ -105,7 +108,7 @@ export const getSubmissionsByTask = async (req, res, next) => {
 // Get submissions for a specific user
 export const getSubmissionsByUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.user.id;
     const submissions = await submissionModel
       .find({ userId })
       .populate("taskId", "title domain");
