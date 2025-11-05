@@ -1,4 +1,3 @@
-// utils/validators.js
 import Joi from "joi";
 
 // Schema for creating a task

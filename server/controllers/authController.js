@@ -42,7 +42,16 @@ export const register = async (req, res, next) => {
       console.error(`Welcome Email Error: ${err.message}`);
     });
 
-    return res.status(201).json({ success: true });
+    return res.status(201).json({
+      success: true,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        domain: user.domain,
+        isAccountVerified: user.isAccountVerified,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -68,7 +77,16 @@ export const login = async (req, res, next) => {
     }
 
     sendTokenCookie(user, res);
-    return res.status(200).json({ success: true });
+    return res.status(200).json({
+      success: true,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        domain: user.domain,
+        isAccountVerified: user.isAccountVerified,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -79,7 +97,7 @@ export const logout = async (req, res, next) => {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV == "production" ? "none" : "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
     return res.status(200).json({ success: true, message: "Logged Out" });
   } catch (error) {

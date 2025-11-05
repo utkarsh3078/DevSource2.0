@@ -8,7 +8,7 @@ import transporter from "../config/nodemailer.js";
 export const sendEmail = async (to, subject, html) => {
   try {
     const mailOptions = {
-      from: process.env.SENDER_EMAIL, // Make sure SENDER_EMAIL is in your .env
+      from: process.env.SENDER_EMAIL,
       to: to,
       subject: subject,
       html: html,
@@ -17,7 +17,6 @@ export const sendEmail = async (to, subject, html) => {
     await transporter.sendMail(mailOptions);
     console.log(`Email sent successfully to ${to}`);
   } catch (error) {
-    // We log the error but don't stop the main API request
     console.error(`Error sending email to ${to}: ${error.message}`);
   }
 };

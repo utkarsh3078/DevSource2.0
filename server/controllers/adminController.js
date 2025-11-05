@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 export const addTask = async (req, res, next) => {
   const { domain, title, description, points } = req.body;
   if (!title || !points) {
-    return res.json({ success: false, message: "Invalid task name" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid task name" });
   }
   try {
     const newTask = taskModel({
@@ -25,7 +27,7 @@ export const removeTask = async (req, res, next) => {
   try {
     const deleted = await taskModel.findOneAndDelete({ taskid });
     if (!deleted) {
-      return res.json({ success: false, message: "Invalid task" });
+      return res.status(404).json({ success: false, message: "Invalid task" });
     }
     await userTaskModel.deleteMany({ taskid: taskid });
     res.json({ success: true, message: "Task removed" });
@@ -34,7 +36,7 @@ export const removeTask = async (req, res, next) => {
   }
 };
 export const getTasksByDomain = async (req, res, next) => {
-  const { domain } = req.body;
+  const { domain } = req.query;
   if (!domain) {
     return res.status(400).json({ success: false, message: "Invalid Domain" });
   }
@@ -54,14 +56,12 @@ export const approveTask = async (req, res, next) => {
   }
 
   try {
-    const updated = userTaskModel({
-      email,
-      taskid,
-      status: "approved",
-      new: true,
-    });
+    const updated = await userTaskModel.findOneAndUpdate(
+      { email, taskid },
+      { status: "approved" },
+      { new: true }
+    );
 
-    await updated.save();
     if (!updated) {
       return res
         .status(404)

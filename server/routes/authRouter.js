@@ -12,7 +12,6 @@ import {
 
 import userAuth from "../middleware/userAuth.js";
 
-// 2. You named your validation file 'validate.js', which is fine.
 import { validate } from "../middleware/validationMiddleware.js";
 import {
   registerSchema,
@@ -24,7 +23,7 @@ import {
 
 const authRouter = express.Router();
 
-// --- Public Routes (No auth needed) ---
+//Public Routes
 authRouter.post("/register", validate(registerSchema), register);
 authRouter.post("/login", validate(loginSchema), login);
 authRouter.post("/send-reset-otp", validate(emailSchema), sendResetOtp);
@@ -34,13 +33,11 @@ authRouter.post(
   resetPassword
 );
 
-// --- Protected Routes (Auth middleware is required) ---
+//Protected Routes
 
-// 3. Use the 'userAuth' MIDDLEWARE from 'userAuth.js' here
+//Use the 'userAuth' MIDDLEWARE from 'userAuth.js' here
 authRouter.post("/logout", userAuth, logout);
-
 authRouter.post("/send-verify-otp", userAuth, sendVerifyOtp);
-
 authRouter.post("/verify-email", userAuth, validate(otpSchema), verifyEmail);
 
 // 4. Corrected /is-auth route
