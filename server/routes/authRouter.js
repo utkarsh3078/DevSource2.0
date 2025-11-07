@@ -34,15 +34,10 @@ authRouter.post(
 );
 
 //Protected Routes
-
-//Use the 'userAuth' MIDDLEWARE from 'userAuth.js' here
 authRouter.post("/logout", userAuth, logout);
 authRouter.post("/send-verify-otp", userAuth, sendVerifyOtp);
 authRouter.post("/verify-email", userAuth, validate(otpSchema), verifyEmail);
 
-// 4. Corrected /is-auth route
-//    - First, the middleware runs to check for a cookie.
-//    - If it passes, the 'isAuthenticated' controller runs.
 authRouter.get("/is-auth", userAuth, isAuthenticated);
 
 export default authRouter;

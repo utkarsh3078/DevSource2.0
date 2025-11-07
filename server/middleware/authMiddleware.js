@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 
-/**
+/*
  * Checks if the user is logged in.
  * 1. Grabs the 'token' from the cookie.
  * 2. Verifies the token.
@@ -30,7 +30,7 @@ export const isAuthenticated = async (req, res, next) => {
         .json({ success: false, message: "User not found." });
     }
 
-    next(); // All good, proceed to the next function
+    next();
   } catch (error) {
     return res.status(401).json({ success: false, message: error.message });
   }
@@ -45,7 +45,6 @@ export const isAdmin = (req, res, next) => {
     next(); // User has the correct role, proceed.
   } else {
     return res.status(403).json({
-      // 403 Forbidden
       success: false,
       message: `Role (${req.user.role}) is not authorized to access this resource.`,
     });

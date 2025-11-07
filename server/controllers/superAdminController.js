@@ -1,12 +1,12 @@
 import userModel from "../models/userModel.js";
-import CustomError from "../utils/CustomError.js"; // Use your error handler
+import CustomError from "../utils/CustomError.js";
 
 export const addAdmin = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    // 1. Check if requester is the Super Admin (using the role, which is better)
-    //    Or, keep your email check: if (req.user.email !== process.env.SUPER_ADMIN_EMAIL)
+    // 1. Check if requester is the Super Admin
+    //    Or, keep your email check:
     if (req.user.role !== "superadmin") {
       throw new CustomError("Access denied. Not a Super Admin.", 403);
     }

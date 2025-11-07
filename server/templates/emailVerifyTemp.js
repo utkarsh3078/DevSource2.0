@@ -1,109 +1,110 @@
 export const EMAIL_VERIFY_TEMPLATE = `
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
-  <title>Email Verify</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" type="text/css">
-  <style type="text/css">
+  <title>Verify Email - DevSource</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Open Sans', sans-serif;
-      background: #E5E5E5;
+      background: #0c0c0c;
+      font-family: Arial, sans-serif;
     }
 
-    table, td {
-      border-collapse: collapse;
+    .wrapper {
+      max-width: 480px;
+      margin: 60px auto;
+      background: #111;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #ff292994;
+      box-shadow: 0 0 25px rgba(255, 20, 20, 0.35);
     }
 
-    .container {
-      width: 100%;
-      max-width: 500px;
-      margin: 70px 0px;
-      background-color: #ffffff;
-    }
-
-    .main-content {
-      padding: 48px 30px 40px;
-      color: #000000;
-    }
-
-    .button {
-      width: 100%;
-      background: #22D172;
-      text-decoration: none;
-      display: inline-block;
-      padding: 10px 0;
-      color: #fff;
-      font-size: 14px;
+    .header {
       text-align: center;
-      font-weight: bold;
-      border-radius: 7px;
+      background: linear-gradient(145deg, #ff3d3d, #b30000);
+      padding: 30px 20px;
     }
 
-    @media only screen and (max-width: 480px) {
-      .container {
-        width: 80% !important;
-      }
+    .header img {
+      width: 85px;
+      margin-bottom: 10px;
+    }
 
-      .button {
-        width: 50% !important;
-      }
+    .header h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .content {
+      padding: 32px 30px;
+      color: #f2f2f2;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .email-highlight {
+      color: #ff3d3d;
+      font-weight: bold;
+    }
+
+    .otp {
+      margin-top: 26px;
+      padding: 14px 0;
+      background: #ff2b2b;
+      font-size: 24px;
+      text-align: center;
+      border-radius: 8px;
+      letter-spacing: 4px;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(255, 0, 0, 0.45);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 12px;
+      background: #0a0a0a;
+      color: #777;
+      border-top: 1px solid #222;
     }
   </style>
 </head>
 
 <body>
-  <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" bgcolor="#F6FAFB">
-    <tbody>
-      <tr>
-        <td valign="top" align="center">
-          <table class="container" width="600" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-              <tr>
-                <td class="main-content">
-                  <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                    <tbody>
-                      <tr>
-                        <td style="padding: 0 0 24px; font-size: 18px; line-height: 150%; font-weight: bold;">
-                          Verify your email
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 0 0 10px; font-size: 14px; line-height: 150%;">
-                          You are just one step away to verify your account for this email: <span style="color: #4C83EE;">{{email}}</span>.
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 0 0 16px; font-size: 14px; line-height: 150%; font-weight: 700;">
-                          Use below OTP to verify your account.
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 0 0 24px;">
-                          <p class="button" >{{otp}}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 0 0 10px; font-size: 14px; line-height: 150%;">
-                          This OTP is valid for 24 hours.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</body>
-</html>
 
+  <div class="wrapper">
+    <div class="header">
+      <img src="https://i.ibb.co/mrV0t5Wy/devsource-logo-1.png" alt="DevSource Logo" />
+      <h1>DevSource Verification</h1>
+    </div>
+
+    <div class="content">
+      Hello! 👋<br><br>
+
+      To proceed, we need to verify your email:
+      <br><span class="email-highlight">{{email}}</span>
+
+      <div class="otp">{{otp}}</div>
+
+      This code is valid for <strong>24 hours</strong>.<br><br>
+      If you didn’t request this, you can safely ignore this message.
+    </div>
+
+    <div class="footer">
+      © ${new Date().getFullYear()} DevSource — All Rights Reserved.
+    </div>
+  </div>
+
+</body>
+
+</html>
 `;
